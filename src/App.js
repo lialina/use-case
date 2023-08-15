@@ -2,16 +2,16 @@ import { useSelector } from "react-redux";
 import { selectUsers } from "./store/userSlice";
 import ContactForm from "./components/ContactForm/ContactForm";
 import ContactsTable from "./components/ContactsTable";
-import "./App.css";
+import { AppStyled } from "./App.styles";
 
 function App() {
   const users = useSelector(selectUsers);
 
   return (
-    <div className="App" data-testid="app">
+    <AppStyled data-testid="app">
       <ContactForm />
       {!!users?.length && <ContactsTable tableData={users} />}
-    </div>
+    </AppStyled>
   );
 }
 
