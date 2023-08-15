@@ -2,23 +2,20 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Provider, useSelector } from "react-redux";
 import configureMockStore from "redux-mock-store";
-import App from "../App";
-import ContactForm from "../components/ContactForm/ContactForm";
-import ContactsTable from "../components/ContactsTable/ContactsTable";
+import App from "./App";
+import ContactsTable from "./components/ContactsTable";
 
 jest.mock("react-redux", () => ({
   ...jest.requireActual("react-redux"),
   useSelector: jest.fn(),
 }));
 
-jest.mock("./components/ContactForm/ContactForm");
-jest.mock("./components/ContactsTable/ContactsTable");
+jest.mock("./components/ContactsTable");
 
 const mockStore = configureMockStore();
 
 describe("App", () => {
   beforeEach(() => {
-    ContactForm.mockReturnValue(<div>ContactForm</div>);
     ContactsTable.mockReturnValue(<div>ContactsTable</div>);
   });
 
@@ -39,7 +36,7 @@ describe("App", () => {
       </Provider>
     );
 
-    expect(screen.getByText("ContactForm")).toBeInTheDocument();
+    expect(screen.getByText("Contact form")).toBeInTheDocument();
   });
 
   it("renders the ContactsTable if there are users", () => {

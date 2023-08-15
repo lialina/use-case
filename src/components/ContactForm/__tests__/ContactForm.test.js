@@ -1,11 +1,10 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { Provider, useDispatch } from "react-redux";
 import userEvent from "@testing-library/user-event";
-import { Provider } from "react-redux";
-import store from "../store/store";
-import ContactForm from "../components/ContactForm/ContactForm";
-import { addUser } from "../store/userSlice";
+import store from "../../../store/store";
+import ContactForm from "../ContactForm";
+import { addUser } from "../../../store/userSlice";
 
 jest.mock("react-redux", () => ({
   ...jest.requireActual("react-redux"),
@@ -37,23 +36,21 @@ describe("ContactForm", () => {
     const messageTextarea = screen.getByTestId("textarea-message");
     const submitBtn = screen.getByRole("button", { name: /submit/i });
 
-    userEvent.type(firstNameInput, "John");
-    userEvent.type(lastNameInput, "Doe");
-    userEvent.type(emailInput, "john.doe@example.com");
-    userEvent.type(messageTextarea, "Hello, World!");
+    await userEvent.type(firstNameInput, "John");
+    await userEvent.type(lastNameInput, "Doe");
+    await userEvent.type(emailInput, "john.doe@example.com");
+    await userEvent.type(messageTextarea, "Hello, World!");
 
-    fireEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
 
-    await waitFor(() =>
-      expect(mockDispatch).toHaveBeenCalledWith(
-        addUser({
-          firstName: "John",
-          lastName: "Doe",
-          email: "john.doe@example.com",
-          message: "Hello, World!",
-          id: expect.any(String),
-        })
-      )
+    expect(mockDispatch).toHaveBeenCalledWith(
+      addUser({
+        firstName: "John",
+        lastName: "Doe",
+        email: "john.doe@example.com",
+        message: "Hello, World!",
+        id: expect.any(String),
+      })
     );
   });
 

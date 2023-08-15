@@ -1,4 +1,4 @@
-import userReducer, { addUser, selectUsers } from "../store/userSlice";
+import userReducer, { addUser, selectUsers } from "../userSlice";
 
 describe("userSlice", () => {
   const initialState = {

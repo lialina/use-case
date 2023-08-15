@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { selectUsers } from "./store/userSlice";
 import ContactForm from "./components/ContactForm/ContactForm";
-import ContactsTable from "./components/ContactsTable/ContactsTable";
+import ContactsTable from "./components/ContactsTable";
 import "./App.css";
 
 function App() {

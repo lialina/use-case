@@ -1,6 +1,6 @@
 import React from "react";
 import { screen, render, within } from "@testing-library/react";
-import ContactsTable from "../components/ContactsTable/ContactsTable";
+import ContactsTable from "../ContactsTable";
 
 describe("ContactsTable", () => {
   const tableHeaders = ["First Name", "Last Name", "Email", "Message"];
