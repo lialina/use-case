@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Field, ErrorMessage } from "formik";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { addUser } from "../store/userSlice";
 import {
   FormStyled,
@@ -10,11 +10,11 @@ import {
   ErrorStyled,
   SubmitBtnStyled,
 } from "./ContactForm.styles";
+import { v4 as uuidv4 } from "uuid";
 import * as Yup from "yup";
 
 const ContactForm = () => {
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.users.users);
 
   const initialValues = {
     firstName: "",
@@ -42,7 +42,7 @@ const ContactForm = () => {
   });
 
   const onSubmit = (values) => {
-    dispatch(addUser(values));
+    dispatch(addUser({ ...values, id: uuidv4() }));
   };
 
   return (
