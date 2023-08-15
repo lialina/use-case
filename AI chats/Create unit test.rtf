@@ -1303,4 +1303,98 @@ If you're using `create-react-app`, you can generate coverage reports using the 
 Keep in mind that while high test coverage is generally desirable, it's not the only metric to consider when assessing the quality of your tests. It's essential to have meaningful tests that effectively simulate real-world scenarios and edge cases.\
 \
 If you want to customize the coverage report further, you can create or modify the `jest.config.js` file in your project and add specific configuration options for the `coverageReporters` and `coverageThreshold` options. You can find more information on these options in the [Jest documentation](https://jestjs.io/docs/configuration#coveragereporters-arraystring).\
+\
+\
+15) SonarCloud doesn't see my unit tests coverage. What do I need to setup?\
+\
+If SonarCloud doesn't see your unit tests coverage, you'll need to ensure that your project is configured correctly to generate coverage reports in a format that SonarCloud can understand. Here are the steps to help you set up test coverage reporting for a JavaScript project using SonarCloud:\
+\
+1. **Generate Coverage Reports**\
+   Ensure that your tests generate coverage reports. For Jest, you can do this by running `npm test -- --coverage` or adding a script in your `package.json` file:\
+   ```json\
+   "scripts": \{\
+     "test": "jest",\
+     "test:coverage": "jest --coverage"\
+   \}\
+   ```\
+\
+   This will generate a coverage report in the `coverage` directory at the root of your project. The `lcov.info` file within this directory is the one you'll need.\
+\
+2. **Install SonarCloud CLI**\
+   You may need the SonarScanner CLI to push your reports to SonarCloud. You can [download it here](https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/) or use a container image if your CI/CD system supports it.\
+\
+3. **Create `sonar-project.properties`**\
+   At the root of your project, create a file named `sonar-project.properties`. This file tells SonarScanner about your project and where to find the relevant reports.\
+   Here is an example configuration:\
+\
+   ```properties\
+   sonar.projectKey=my-project-key\
+   sonar.organization=my-organization\
+   sonar.sources=src\
+   sonar.tests=test\
+   sonar.test.inclusions=**/*.test.js,**/*.spec.js\
+   sonar.javascript.lcov.reportPaths=coverage/lcov.info\
+   ```\
+\
+   Make sure to replace the placeholders with your actual project key and organization.\
+\
+4. **Run SonarScanner**\
+   Execute the SonarScanner CLI tool at the root of your project where the `sonar-project.properties` file is located. It will read the configuration from the file and upload your code and coverage reports to SonarCloud.\
+\
+   ```shell\
+   sonar-scanner\
+   ```\
+\
+5. **Check SonarCloud Dashboard**\
+   After running SonarScanner, go to your SonarCloud dashboard, and you should see the test coverage data for your project.\
+\
+6. **Integrate with CI/CD (Optional)**\
+   You can also integrate SonarCloud with your CI/CD pipeline by adding the SonarScanner step to your build process. This way, every time you push new code, the coverage reports will be automatically sent to SonarCloud.\
+\
+By following these steps, you should be able to set up test coverage reporting for your project on SonarCloud. Remember to always keep your `sonar-project.properties` file up-to-date with your project's structure and paths to ensure accurate reporting.\
+\
+\
+16) How to Install SonarCloud CLI in more details\
+\
+Actually, there is no specific "SonarCloud CLI". The CLI tool used to analyze projects and push them to SonarCloud is called "SonarScanner". Here are more detailed steps on how to install and use SonarScanner:\
+\
+1. **Download SonarScanner**: Visit the [SonarScanner download page](https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/) and download the appropriate version for your operating system. There are versions available for Windows, macOS, and Linux.\
+\
+2. **Extract SonarScanner**: Once downloaded, extract the contents of the zip file to a directory of your choice.\
+\
+3. **Configure the Path (Optional)**: Add the `bin` directory of the extracted folder to your system's PATH environment variable. This step is optional, but it allows you to run the `sonar-scanner` command from any location in your command prompt or terminal.\
+\
+   For Linux/Mac:\
+   ```shell\
+   export PATH=$PATH:/path/to/sonar-scanner/bin\
+   ```\
+   For Windows, you can add the path via the "Environment Variables" dialog in the "System Properties".\
+\
+4. **Configure SonarQube server information**: Open the `conf/sonar-scanner.properties` file in the extracted folder and configure the `sonar.host.url` property to point to your SonarCloud instance:\
+   ```properties\
+   sonar.host.url=https://sonarcloud.io\
+   ```\
+\
+   You can leave the `sonar.login` and `sonar.password` properties blank, as you will specify them in your project's `sonar-project.properties` file or pass them as command-line arguments.\
+\
+5. **Create a `sonar-project.properties` File**: Create a `sonar-project.properties` file at the root of your project (if you haven't already) and configure your project settings. Here is an example:\
+   ```properties\
+   sonar.projectKey=my-project-key\
+   sonar.organization=my-organization\
+   sonar.sources=src\
+   sonar.tests=test\
+   sonar.test.inclusions=**/*.test.js,**/*.spec.js\
+   sonar.javascript.lcov.reportPaths=coverage/lcov.info\
+   ```\
+\
+6. **Run SonarScanner**: Navigate to your project's root directory in the command prompt or terminal, and run the following command:\
+   ```shell\
+   sonar-scanner -Dsonar.login=your-sonarcloud-token\
+   ```\
+\
+   Replace `your-sonarcloud-token` with the token you generated in SonarCloud. You can create a token in SonarCloud by going to "My Account" -> "Security" -> "Generate New Token".\
+\
+7. **Check Your Analysis on SonarCloud**: After running the scanner, visit your project on SonarCloud, and you should see the latest analysis results.\
+\
+That's it! By following these steps, you will have installed and configured SonarScanner to analyze your project and push the analysis results to SonarCloud.\
 }
