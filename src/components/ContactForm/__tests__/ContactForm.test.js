@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { useDispatch } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
 import store from "../../../store/store";

@@ -1,8 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import configureMockStore from "redux-mock-store";
-import { useSelector } from "react-redux";
 import App from "./App";
 import ContactForm from "./components/ContactForm/ContactForm";
 import ContactsTable from "./components/ContactsTable/ContactsTable";
