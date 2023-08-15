@@ -2,9 +2,9 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Provider, useSelector } from "react-redux";
 import configureMockStore from "redux-mock-store";
-import App from "./App";
-import ContactForm from "./components/ContactForm/ContactForm";
-import ContactsTable from "./components/ContactsTable/ContactsTable";
+import App from "../App";
+import ContactForm from "../components/ContactForm/ContactForm";
+import ContactsTable from "../components/ContactsTable/ContactsTable";
 
 jest.mock("react-redux", () => ({
   ...jest.requireActual("react-redux"),

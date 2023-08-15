@@ -3,9 +3,9 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider, useDispatch } from "react-redux";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
-import store from "../../../store/store";
-import ContactForm from "../ContactForm";
-import { addUser } from "../../../store/userSlice";
+import store from "../store/store";
+import ContactForm from "../components/ContactForm/ContactForm";
+import { addUser } from "../store/userSlice";
 
 jest.mock("react-redux", () => ({
   ...jest.requireActual("react-redux"),
