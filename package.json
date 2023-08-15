@@ -47,13 +47,5 @@
     "@testing-library/user-event": "^14.4.3",
     "jest": "^29.6.2",
     "jest-environment-jsdom": "^29.6.2"
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "\\.(css|less|scss|sss|styl)$": "<rootDir>/node_modules/jest-css-modules"
-    },
-    "setupFilesAfterEnv": [
-      "./src/setupTests.js"
-    ]
   }
 }
