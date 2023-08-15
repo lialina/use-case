@@ -1,0 +1,1306 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2709
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 HelveticaNeue;}
+{\colortbl;\red255\green255\blue255;\red39\green40\blue50;}
+{\*\expandedcolortbl;;\cssrgb\c20392\c20784\c25490;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww51000\viewh25920\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 1) 
+\f1\fs32 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Write unit test using react-testing-library for this component:\
+\pard\pardeftab720\partightenfactor0
+\cf2 \
+const ContactForm = () => \{\
+  const dispatch = useDispatch();\
+\
+  const initialValues = \{\
+    firstName: "",\
+    lastName: "",\
+    email: "",\
+    message: "",\
+  \};\
+\
+  const validationSchema = Yup.object(\{\
+    firstName: Yup.string()\
+      .min(1, "First name must contain at least 1 character")\
+      .max(50, "First name must contain up to 50 characters")\
+      .required("First Name is required"),\
+    lastName: Yup.string()\
+      .min(1, "Last name must contain at least 1 character")\
+      .max(50, "Last name must contain up to 50 characters")\
+      .required("Last Name is required"),\
+    email: Yup.string()\
+      .email("Invalid email format")\
+      .required("Email is required"),\
+    message: Yup.string()\
+      .min(1, "Message must contain at least 1 character")\
+      .max(200, "Message must contain up to 200 characters")\
+      .required("Message is required"),\
+  \});\
+\
+  const onSubmit = (values) => \{\
+    dispatch(addUser(\{ ...values, id: uuidv4() \}));\
+  \};\
+\
+  return (\
+    <Formik\
+      initialValues=\{initialValues\}\
+      validationSchema=\{validationSchema\}\
+      onSubmit=\{onSubmit\}\
+    >\
+      \{(formik) => (\
+        <FormStyled>\
+          <HeaderStyled>Contact form</HeaderStyled>\
+          <FieldWrapper>\
+            <LabelStyled>First Name</LabelStyled>\
+            <Field\
+              className="field"\
+              type="text"\
+              name="firstName"\
+              data-testid="input-first-name"\
+            />\
+            <ErrorMessage name="firstName">\
+              \{(errorMsg) => <ErrorStyled>\{errorMsg\}</ErrorStyled>\}\
+            </ErrorMessage>\
+          </FieldWrapper>\
+\
+          <FieldWrapper>\
+            <LabelStyled>Last Name</LabelStyled>\
+            <Field\
+              className="field"\
+              type="text"\
+              name="lastName"\
+              data-testid="input-last-name"\
+            />\
+            <ErrorMessage name="lastName">\
+              \{(errorMsg) => <ErrorStyled>\{errorMsg\}</ErrorStyled>\}\
+            </ErrorMessage>\
+          </FieldWrapper>\
+\
+          <FieldWrapper>\
+            <LabelStyled>Email</LabelStyled>\
+            <Field\
+              className="field"\
+              type="email"\
+              name="email"\
+              data-testid="input-email"\
+            />\
+            <ErrorMessage name="email">\
+              \{(errorMsg) => <ErrorStyled>\{errorMsg\}</ErrorStyled>\}\
+            </ErrorMessage>\
+          </FieldWrapper>\
+\
+          <FieldWrapper>\
+            <LabelStyled>Message</LabelStyled>\
+            <Field\
+              className="field field-textarea"\
+              as="textarea"\
+              name="message"\
+              data-testid="textarea-message"\
+            />\
+\
+            <ErrorMessage name="message">\
+              \{(errorMsg) => <ErrorStyled>\{errorMsg\}</ErrorStyled>\}\
+            </ErrorMessage>\
+          </FieldWrapper>\
+\
+          <div className="submit-btn-container">\
+            <SubmitBtnStyled type="submit">Submit</SubmitBtnStyled>\
+          </div>\
+        </FormStyled>\
+      )\}\
+    </Formik>\
+  );\
+\};\
+\
+Certainly! Below is an example of how you can write a unit test for this component using `react-testing-library` and `jest`.\
+\
+First, make sure you have the following dependencies installed:\
+\
+```bash\
+npm install --save-dev @testing-library/react @testing-library/jest-dom @testing-library/user-event jest\
+```\
+\
+Next, write your test:\
+\
+```javascript\
+import React from "react";\
+import \{ render, screen, fireEvent \} from "@testing-library/react";\
+import \{ Provider \} from "react-redux";\
+import \{ store \} from "yourStoreLocation"; // Replace with your store location\
+import userEvent from "@testing-library/user-event";\
+import ContactForm from "./ContactForm"; // Replace with your component location\
+import \{ addUser \} from "yourActionsLocation"; // Replace with your actions location\
+\
+describe("ContactForm", () => \{\
+  test("should submit the form with correct values", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const firstNameInput = screen.getByTestId("input-first-name");\
+    const lastNameInput = screen.getByTestId("input-last-name");\
+    const emailInput = screen.getByTestId("input-email");\
+    const messageTextarea = screen.getByTestId("textarea-message");\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    userEvent.type(firstNameInput, "John");\
+    userEvent.type(lastNameInput, "Doe");\
+    userEvent.type(emailInput, "john.doe@example.com");\
+    userEvent.type(messageTextarea, "Hello, World!");\
+\
+    // If you are using a mock store or you want to assert the actions, you could mock the dispatch function here\
+\
+    fireEvent.click(submitBtn);\
+\
+    // If you are using a mock store, you could assert that the action has been dispatched with the correct payload\
+  \});\
+\
+  test("should show validation errors", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    fireEvent.click(submitBtn);\
+\
+    expect(screen.getByText("First Name is required")).toBeInTheDocument();\
+    expect(screen.getByText("Last Name is required")).toBeInTheDocument();\
+    expect(screen.getByText("Email is required")).toBeInTheDocument();\
+    expect(screen.getByText("Message is required")).toBeInTheDocument();\
+  \});\
+\});\
+```\
+\
+This test suite includes two test cases. The first test case is for form submission with valid inputs. The second test case checks for validation error messages if the form is submitted with empty fields. Modify the paths according to your project structure.\
+\
+Make sure that you have your store and action creators correctly imported and used in your tests. If you want to mock the Redux store or dispatch function, you can use libraries like `redux-mock-store` or `jest-mock`.\
+\
+\
+2) Use redux-mock-store in the previous unit tests\
+\
+Sure, here is an updated version of the tests using `redux-mock-store` to mock the Redux store:\
+\
+First, install `redux-mock-store`:\
+\
+```bash\
+npm install --save-dev redux-mock-store\
+```\
+\
+Next, update the tests:\
+\
+```javascript\
+import React from "react";\
+import \{ render, screen, fireEvent \} from "@testing-library/react";\
+import userEvent from "@testing-library/user-event";\
+import \{ Provider \} from "react-redux";\
+import configureMockStore from "redux-mock-store";\
+import ContactForm from "./ContactForm"; // Replace with your component location\
+import \{ addUser \} from "yourActionsLocation"; // Replace with your actions location\
+\
+const mockStore = configureMockStore();\
+\
+describe("ContactForm", () => \{\
+  let store;\
+\
+  beforeEach(() => \{\
+    store = mockStore(\{\
+      yourReducer: \{\} // Replace with your initial state\
+    \});\
+    store.dispatch = jest.fn();\
+  \});\
+\
+  test("should submit the form with correct values", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const firstNameInput = screen.getByTestId("input-first-name");\
+    const lastNameInput = screen.getByTestId("input-last-name");\
+    const emailInput = screen.getByTestId("input-email");\
+    const messageTextarea = screen.getByTestId("textarea-message");\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    userEvent.type(firstNameInput, "John");\
+    userEvent.type(lastNameInput, "Doe");\
+    userEvent.type(emailInput, "john.doe@example.com");\
+    userEvent.type(messageTextarea, "Hello, World!");\
+\
+    fireEvent.click(submitBtn);\
+\
+    expect(store.dispatch).toHaveBeenCalledWith(\
+      addUser(\{\
+        firstName: "John",\
+        lastName: "Doe",\
+        email: "john.doe@example.com",\
+        message: "Hello, World!",\
+        id: expect.any(String)\
+      \})\
+    );\
+  \});\
+\
+  test("should show validation errors", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    fireEvent.click(submitBtn);\
+\
+    expect(screen.getByText("First Name is required")).toBeInTheDocument();\
+    expect(screen.getByText("Last Name is required")).toBeInTheDocument();\
+    expect(screen.getByText("Email is required")).toBeInTheDocument();\
+    expect(screen.getByText("Message is required")).toBeInTheDocument();\
+  \});\
+\});\
+```\
+\
+In this example, we are using `redux-mock-store` to create a mock store for the test. We also use `jest.fn()` to mock the `dispatch` function of the store. We then assert that the `dispatch` function has been called with the correct action when the form is submitted. The paths and action creators should be updated according to your project structure.\
+\
+\
+3) Use mock dispatch in previous unit tests instead of redux-mock-store\
+\
+Sure, you can use `jest` to mock the `dispatch` function and assert that the correct action was dispatched. Here's how you could do it:\
+\
+```javascript\
+import React from "react";\
+import \{ render, screen, fireEvent \} from "@testing-library/react";\
+import \{ useDispatch \} from "react-redux";\
+import userEvent from "@testing-library/user-event";\
+import \{ Provider \} from "react-redux";\
+import store from "yourStoreLocation"; // Replace with your store location\
+import ContactForm from "./ContactForm"; // Replace with your component location\
+import \{ addUser \} from "yourActionsLocation"; // Replace with your actions location\
+\
+jest.mock("react-redux", () => (\{\
+  ...jest.requireActual("react-redux"),\
+  useDispatch: jest.fn()\
+\}));\
+\
+describe("ContactForm", () => \{\
+  let mockDispatch;\
+\
+  beforeEach(() => \{\
+    mockDispatch = jest.fn();\
+    useDispatch.mockReturnValue(mockDispatch);\
+  \});\
+\
+  afterEach(() => \{\
+    jest.clearAllMocks();\
+  \});\
+\
+  test("should submit the form with correct values", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const firstNameInput = screen.getByTestId("input-first-name");\
+    const lastNameInput = screen.getByTestId("input-last-name");\
+    const emailInput = screen.getByTestId("input-email");\
+    const messageTextarea = screen.getByTestId("textarea-message");\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    userEvent.type(firstNameInput, "John");\
+    userEvent.type(lastNameInput, "Doe");\
+    userEvent.type(emailInput, "john.doe@example.com");\
+    userEvent.type(messageTextarea, "Hello, World!");\
+\
+    fireEvent.click(submitBtn);\
+\
+    expect(mockDispatch).toHaveBeenCalledWith(\
+      addUser(\{\
+        firstName: "John",\
+        lastName: "Doe",\
+        email: "john.doe@example.com",\
+        message: "Hello, World!",\
+        id: expect.any(String)\
+      \})\
+    );\
+  \});\
+\
+  test("should show validation errors", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    fireEvent.click(submitBtn);\
+\
+    expect(screen.getByText("First Name is required")).toBeInTheDocument();\
+    expect(screen.getByText("Last Name is required")).toBeInTheDocument();\
+    expect(screen.getByText("Email is required")).toBeInTheDocument();\
+    expect(screen.getByText("Message is required")).toBeInTheDocument();\
+  \});\
+\});\
+```\
+\
+In this version of the test suite, we're using `jest.mock` to mock the `useDispatch` hook and return a mock dispatch function. We then use `jest.fn()` to create a mock function and return it when `useDispatch` is called. We assert that the mock dispatch function was called with the correct action after the form is submitted.\
+\
+\
+4) These unit tests failed because mockDispatch Number of calls is 0. How to fix this?\
+\
+If the `mockDispatch` is not being called, it could be because the form submission is asynchronous or the validation might prevent the form from being submitted.\
+\
+You could try waiting for the form submission to complete using `waitFor` from `@testing-library/react`. Also, ensure that all required fields are filled in before submitting the form.\
+\
+Here's an updated version of your test:\
+\
+```javascript\
+import React from "react";\
+import \{ render, screen, fireEvent, waitFor \} from "@testing-library/react";\
+import \{ useDispatch \} from "react-redux";\
+import userEvent from "@testing-library/user-event";\
+import \{ Provider \} from "react-redux";\
+import store from "yourStoreLocation"; // Replace with your store location\
+import ContactForm from "./ContactForm"; // Replace with your component location\
+import \{ addUser \} from "yourActionsLocation"; // Replace with your actions location\
+\
+jest.mock("react-redux", () => (\{\
+  ...jest.requireActual("react-redux"),\
+  useDispatch: jest.fn()\
+\}));\
+\
+describe("ContactForm", () => \{\
+  let mockDispatch;\
+\
+  beforeEach(() => \{\
+    mockDispatch = jest.fn();\
+    useDispatch.mockReturnValue(mockDispatch);\
+  \});\
+\
+  afterEach(() => \{\
+    jest.clearAllMocks();\
+  \});\
+\
+  test("should submit the form with correct values", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const firstNameInput = screen.getByTestId("input-first-name");\
+    const lastNameInput = screen.getByTestId("input-last-name");\
+    const emailInput = screen.getByTestId("input-email");\
+    const messageTextarea = screen.getByTestId("textarea-message");\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    userEvent.type(firstNameInput, "John");\
+    userEvent.type(lastNameInput, "Doe");\
+    userEvent.type(emailInput, "john.doe@example.com");\
+    userEvent.type(messageTextarea, "Hello, World!");\
+\
+    fireEvent.click(submitBtn);\
+\
+    await waitFor(() =>\
+      expect(mockDispatch).toHaveBeenCalledWith(\
+        addUser(\{\
+          firstName: "John",\
+          lastName: "Doe",\
+          email: "john.doe@example.com",\
+          message: "Hello, World!",\
+          id: expect.any(String)\
+        \})\
+      )\
+    );\
+  \});\
+\
+  test("should show validation errors", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    fireEvent.click(submitBtn);\
+\
+    await waitFor(() => \{\
+      expect(screen.getByText("First Name is required")).toBeInTheDocument();\
+      expect(screen.getByText("Last Name is required")).toBeInTheDocument();\
+      expect(screen.getByText("Email is required")).toBeInTheDocument();\
+      expect(screen.getByText("Message is required")).toBeInTheDocument();\
+    \});\
+  \});\
+\});\
+```\
+\
+In this updated version, we are using `waitFor` from `@testing-library/react` to wait for the form submission to complete. This is necessary as the form submission might be asynchronous or the validation might be causing a delay.\
+\
+\
+5) I got eslint warning "Avoid using multiple assertions within `waitFor` callback". How to fix this?\
+\
+That ESLint warning is recommending that you should not use multiple assertions within the `waitFor` callback as it can lead to unclear test results. Instead, you should use the `waitFor` callback for a single assertion and then use other assertions outside the callback.\
+\
+Here's an updated version of your test with separate `waitFor` calls for each assertion:\
+\
+```javascript\
+import React from "react";\
+import \{ render, screen, fireEvent, waitFor \} from "@testing-library/react";\
+import \{ useDispatch \} from "react-redux";\
+import userEvent from "@testing-library/user-event";\
+import \{ Provider \} from "react-redux";\
+import store from "yourStoreLocation"; // Replace with your store location\
+import ContactForm from "./ContactForm"; // Replace with your component location\
+import \{ addUser \} from "yourActionsLocation"; // Replace with your actions location\
+\
+jest.mock("react-redux", () => (\{\
+  ...jest.requireActual("react-redux"),\
+  useDispatch: jest.fn()\
+\}));\
+\
+describe("ContactForm", () => \{\
+  let mockDispatch;\
+\
+  beforeEach(() => \{\
+    mockDispatch = jest.fn();\
+    useDispatch.mockReturnValue(mockDispatch);\
+  \});\
+\
+  afterEach(() => \{\
+    jest.clearAllMocks();\
+  \});\
+\
+  test("should submit the form with correct values", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const firstNameInput = screen.getByTestId("input-first-name");\
+    const lastNameInput = screen.getByTestId("input-last-name");\
+    const emailInput = screen.getByTestId("input-email");\
+    const messageTextarea = screen.getByTestId("textarea-message");\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    userEvent.type(firstNameInput, "John");\
+    userEvent.type(lastNameInput, "Doe");\
+    userEvent.type(emailInput, "john.doe@example.com");\
+    userEvent.type(messageTextarea, "Hello, World!");\
+\
+    fireEvent.click(submitBtn);\
+\
+    await waitFor(() =>\
+      expect(mockDispatch).toHaveBeenCalledWith(\
+        addUser(\{\
+          firstName: "John",\
+          lastName: "Doe",\
+          email: "john.doe@example.com",\
+          message: "Hello, World!",\
+          id: expect.any(String)\
+        \})\
+      )\
+    );\
+  \});\
+\
+  test("should show validation errors", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    fireEvent.click(submitBtn);\
+\
+    await waitFor(() => expect(screen.getByText("First Name is required")).toBeInTheDocument());\
+    await waitFor(() => expect(screen.getByText("Last Name is required")).toBeInTheDocument());\
+    await waitFor(() => expect(screen.getByText("Email is required")).toBeInTheDocument());\
+    await waitFor(() => expect(screen.getByText("Message is required")).toBeInTheDocument());\
+  \});\
+\});\
+```\
+\
+In this version, we are using separate `waitFor` calls for each assertion to make the tests clearer and to satisfy the ESLint rule.\
+\
+\
+6) I also get this console.error while running unit tests " console.error\
+    Warning: An update to Formik inside a test was not wrapped in act(...).\
+    \
+    When testing, code that causes React state updates should be wrapped into act(...):\
+    \
+    act(() => \{\
+      /* fire events that update state */\
+    \});\
+    /* assert on the output */"\
+\
+How to fix it?\
+\
+This warning occurs when React state updates are happening outside of the `act` function. The `act` function is used to group multiple React state updates together in tests, so they can be asserted on in a single batch. \
+\
+In your case, the warning might be triggered by the form submission, which updates the state inside the `Formik` component. You can try wrapping the code that triggers the state update in an `act` call. \
+\
+Here's the updated version of your test:\
+\
+```javascript\
+import React from "react";\
+import \{ render, screen, fireEvent, waitFor, act \} from "@testing-library/react";\
+import \{ useDispatch \} from "react-redux";\
+import userEvent from "@testing-library/user-event";\
+import \{ Provider \} from "react-redux";\
+import store from "yourStoreLocation"; // Replace with your store location\
+import ContactForm from "./ContactForm"; // Replace with your component location\
+import \{ addUser \} from "yourActionsLocation"; // Replace with your actions location\
+\
+jest.mock("react-redux", () => (\{\
+  ...jest.requireActual("react-redux"),\
+  useDispatch: jest.fn()\
+\}));\
+\
+describe("ContactForm", () => \{\
+  let mockDispatch;\
+\
+  beforeEach(() => \{\
+    mockDispatch = jest.fn();\
+    useDispatch.mockReturnValue(mockDispatch);\
+  \});\
+\
+  afterEach(() => \{\
+    jest.clearAllMocks();\
+  \});\
+\
+  test("should submit the form with correct values", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const firstNameInput = screen.getByTestId("input-first-name");\
+    const lastNameInput = screen.getByTestId("input-last-name");\
+    const emailInput = screen.getByTestId("input-email");\
+    const messageTextarea = screen.getByTestId("textarea-message");\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    userEvent.type(firstNameInput, "John");\
+    userEvent.type(lastNameInput, "Doe");\
+    userEvent.type(emailInput, "john.doe@example.com");\
+    userEvent.type(messageTextarea, "Hello, World!");\
+\
+    await act(async () => \{\
+      fireEvent.click(submitBtn);\
+    \});\
+\
+    await waitFor(() =>\
+      expect(mockDispatch).toHaveBeenCalledWith(\
+        addUser(\{\
+          firstName: "John",\
+          lastName: "Doe",\
+          email: "john.doe@example.com",\
+          message: "Hello, World!",\
+          id: expect.any(String)\
+        \})\
+      )\
+    );\
+  \});\
+\
+  test("should show validation errors", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    await act(async () => \{\
+      fireEvent.click(submitBtn);\
+    \});\
+\
+    await waitFor(() => expect(screen.getByText("First Name is required")).toBeInTheDocument());\
+    await waitFor(() => expect(screen.getByText("Last Name is required")).toBeInTheDocument());\
+    await waitFor(() => expect(screen.getByText("Email is required")).toBeInTheDocument());\
+    await waitFor(() => expect(screen.getByText("Message is required")).toBeInTheDocument());\
+  \});\
+\});\
+```\
+\
+Now, the code that triggers the state update (the form submission) is wrapped in an `act` call. This should suppress the warning and ensure that all state updates are correctly handled by React in your tests.\
+\
+\
+7) But now I got eslint error "Avoid wrapping Testing Library util calls in `act`". How to fix this?\
+\
+The ESLint warning "Avoid wrapping Testing Library util calls in `act`" comes from the `testing-library` ESLint plugin. The warning is triggered because `fireEvent` and `userEvent` from `@testing-library/react` already use `act` internally, so there's no need to wrap them in an `act` call again.\
+\
+You can remove the `act` wrapping from `fireEvent` and `userEvent` calls:\
+\
+```javascript\
+import React from "react";\
+import \{ render, screen, fireEvent, waitFor \} from "@testing-library/react";\
+import \{ useDispatch \} from "react-redux";\
+import userEvent from "@testing-library/user-event";\
+import \{ Provider \} from "react-redux";\
+import store from "yourStoreLocation"; // Replace with your store location\
+import ContactForm from "./ContactForm"; // Replace with your component location\
+import \{ addUser \} from "yourActionsLocation"; // Replace with your actions location\
+\
+jest.mock("react-redux", () => (\{\
+  ...jest.requireActual("react-redux"),\
+  useDispatch: jest.fn()\
+\}));\
+\
+describe("ContactForm", () => \{\
+  let mockDispatch;\
+\
+  beforeEach(() => \{\
+    mockDispatch = jest.fn();\
+    useDispatch.mockReturnValue(mockDispatch);\
+  \});\
+\
+  afterEach(() => \{\
+    jest.clearAllMocks();\
+  \});\
+\
+  test("should submit the form with correct values", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const firstNameInput = screen.getByTestId("input-first-name");\
+    const lastNameInput = screen.getByTestId("input-last-name");\
+    const emailInput = screen.getByTestId("input-email");\
+    const messageTextarea = screen.getByTestId("textarea-message");\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    userEvent.type(firstNameInput, "John");\
+    userEvent.type(lastNameInput, "Doe");\
+    userEvent.type(emailInput, "john.doe@example.com");\
+    userEvent.type(messageTextarea, "Hello, World!");\
+\
+    fireEvent.click(submitBtn);\
+\
+    await waitFor(() =>\
+      expect(mockDispatch).toHaveBeenCalledWith(\
+        addUser(\{\
+          firstName: "John",\
+          lastName: "Doe",\
+          email: "john.doe@example.com",\
+          message: "Hello, World!",\
+          id: expect.any(String)\
+        \})\
+      )\
+    );\
+  \});\
+\
+  test("should show validation errors", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    fireEvent.click(submitBtn);\
+\
+    await waitFor(() => expect(screen.getByText("First Name is required")).toBeInTheDocument());\
+    await waitFor(() => expect(screen.getByText("Last Name is required")).toBeInTheDocument());\
+    await waitFor(() => expect(screen.getByText("Email is required")).toBeInTheDocument());\
+    await waitFor(() => expect(screen.getByText("Message is required")).toBeInTheDocument());\
+  \});\
+\});\
+```\
+\
+You should no longer see the ESLint error "Avoid wrapping Testing Library util calls in `act`".\
+\
+\
+8) Yes, it fixed ESLint error "Avoid wrapping Testing Library util calls in act", but I still see this error in the console " console.error\
+    Warning: An update to Formik inside a test was not wrapped in act(...).\
+    \
+    When testing, code that causes React state updates should be wrapped into act(...):\
+    \
+    act(() => \{\
+      /* fire events that update state */\
+    \});\
+    /* assert on the output */"\
+\
+The warning about updates not being wrapped in `act` can be tricky to resolve because it often results from asynchronous operations in your component that aren't being waited for in your tests.\
+\
+In this case, you might be seeing this warning because the `Formik` form submission is an asynchronous operation. The `waitFor` function from `@testing-library/react` is helpful in these cases, but you may need to use `act` directly with asynchronous actions.\
+\
+Here's how you could adjust your test to ensure all asynchronous actions are accounted for:\
+\
+```javascript\
+import React from "react";\
+import \{ render, screen, fireEvent, waitFor, act \} from "@testing-library/react";\
+import \{ useDispatch \} from "react-redux";\
+import userEvent from "@testing-library/user-event";\
+import \{ Provider \} from "react-redux";\
+import store from "yourStoreLocation"; // Replace with your store location\
+import ContactForm from "./ContactForm"; // Replace with your component location\
+import \{ addUser \} from "yourActionsLocation"; // Replace with your actions location\
+\
+jest.mock("react-redux", () => (\{\
+  ...jest.requireActual("react-redux"),\
+  useDispatch: jest.fn()\
+\}));\
+\
+describe("ContactForm", () => \{\
+  let mockDispatch;\
+\
+  beforeEach(() => \{\
+    mockDispatch = jest.fn();\
+    useDispatch.mockReturnValue(mockDispatch);\
+  \});\
+\
+  afterEach(() => \{\
+    jest.clearAllMocks();\
+  \});\
+\
+  test("should submit the form with correct values", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const firstNameInput = screen.getByTestId("input-first-name");\
+    const lastNameInput = screen.getByTestId("input-last-name");\
+    const emailInput = screen.getByTestId("input-email");\
+    const messageTextarea = screen.getByTestId("textarea-message");\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    userEvent.type(firstNameInput, "John");\
+    userEvent.type(lastNameInput, "Doe");\
+    userEvent.type(emailInput, "john.doe@example.com");\
+    userEvent.type(messageTextarea, "Hello, World!");\
+\
+    await act(async () => \{\
+      fireEvent.click(submitBtn);\
+      await waitFor(() =>\
+        expect(mockDispatch).toHaveBeenCalledWith(\
+          addUser(\{\
+            firstName: "John",\
+            lastName: "Doe",\
+            email: "john.doe@example.com",\
+            message: "Hello, World!",\
+            id: expect.any(String)\
+          \})\
+        )\
+      );\
+    \});\
+  \});\
+\
+  test("should show validation errors", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <ContactForm />\
+      </Provider>\
+    );\
+\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    await act(async () => \{\
+      fireEvent.click(submitBtn);\
+      await waitFor(() => expect(screen.getByText("First Name is required")).toBeInTheDocument());\
+      await waitFor(() => expect(screen.getByText("Last Name is required")).toBeInTheDocument());\
+      await waitFor(() => expect(screen.getByText("Email is required")).toBeInTheDocument());\
+      await waitFor(() => expect(screen.getByText("Message is required")).toBeInTheDocument());\
+    \});\
+  \});\
+\});\
+```\
+\
+The difference is that we're now wrapping both the `fireEvent.click(submitBtn)` and the subsequent `waitFor` in the `act` function. This should ensure that all state updates related to the form submission are correctly batched together and that the warning no longer appears in the console.\
+\
+\
+9) Yes, but now I got the new console.error "Warning: The current testing environment is not configured to support act(...)"\
+\
+The error message "Warning: The current testing environment is not configured to support act(...)" typically indicates that the version of React being used in the project doesn't support the `act` function or there might be some issue with the setup of the testing environment.\
+\
+Here are some possible solutions:\
+\
+1. **Update React and ReactDOM versions**: Ensure you are using a version of React and ReactDOM that supports `act`. The `act` function was introduced in React 16.8.6, so you need to use at least this version.\
+\
+2. **Check your imports**: Make sure you're importing `act` from `@testing-library/react` and not from another library by mistake.\
+\
+3. **Check your testing environment**: Ensure your testing environment supports async utilities. If you're using `jest`, make sure you're using a version that supports async/await.\
+\
+4. **Use a different form of `act`**: If you're using `act` from `react-test-renderer`, you could try switching to the `act` from `react-dom/test-utils`, or vice versa.\
+\
+5. **Check for conflicts**: Sometimes, if you have multiple versions of React installed in your project (for example, due to different dependencies requiring different versions), it can cause issues. You can check for multiple versions of React in your project by running `npm ls react` or `yarn list react` and resolving any conflicts.\
+\
+Try updating your React and ReactDOM versions and ensure your test environment is correctly configured for the version of React you're using. Make sure that the `act` function you're using is compatible with your testing environment.\
+\
+If none of the above solutions work, you could consider setting up a new testing environment from scratch to ensure there are no conflicting dependencies or configuration issues.\
+\
+\
+10) Wrap component in tests in Formik\
+\
+Sure! If you want to wrap your component in a `Formik` context directly within your test, you can do that. Here's an example:\
+\
+```javascript\
+import React from "react";\
+import \{ render, screen, fireEvent, waitFor, act \} from "@testing-library/react";\
+import \{ useDispatch \} from "react-redux";\
+import userEvent from "@testing-library/user-event";\
+import \{ Provider \} from "react-redux";\
+import store from "yourStoreLocation"; // Replace with your store location\
+import ContactForm from "./ContactForm"; // Replace with your component location\
+import \{ addUser \} from "yourActionsLocation"; // Replace with your actions location\
+import \{ Formik \} from "formik";\
+\
+jest.mock("react-redux", () => (\{\
+  ...jest.requireActual("react-redux"),\
+  useDispatch: jest.fn()\
+\}));\
+\
+describe("ContactForm", () => \{\
+  let mockDispatch;\
+\
+  beforeEach(() => \{\
+    mockDispatch = jest.fn();\
+    useDispatch.mockReturnValue(mockDispatch);\
+  \});\
+\
+  afterEach(() => \{\
+    jest.clearAllMocks();\
+  \});\
+\
+  const WrappedContactForm = (props) => (\
+    <Formik\
+      initialValues=\{\{\
+        firstName: "",\
+        lastName: "",\
+        email: "",\
+        message: ""\
+      \}\}\
+      // Validation schema and onSubmit logic...\
+    >\
+      <ContactForm \{...props\} />\
+    </Formik>\
+  );\
+\
+  test("should submit the form with correct values", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <WrappedContactForm />\
+      </Provider>\
+    );\
+\
+    const firstNameInput = screen.getByTestId("input-first-name");\
+    const lastNameInput = screen.getByTestId("input-last-name");\
+    const emailInput = screen.getByTestId("input-email");\
+    const messageTextarea = screen.getByTestId("textarea-message");\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    userEvent.type(firstNameInput, "John");\
+    userEvent.type(lastNameInput, "Doe");\
+    userEvent.type(emailInput, "john.doe@example.com");\
+    userEvent.type(messageTextarea, "Hello, World!");\
+\
+    await act(async () => \{\
+      fireEvent.click(submitBtn);\
+      await waitFor(() =>\
+        expect(mockDispatch).toHaveBeenCalledWith(\
+          addUser(\{\
+            firstName: "John",\
+            lastName: "Doe",\
+            email: "john.doe@example.com",\
+            message: "Hello, World!",\
+            id: expect.any(String)\
+          \})\
+        )\
+      );\
+    \});\
+  \});\
+\
+  test("should show validation errors", async () => \{\
+    render(\
+      <Provider store=\{store\}>\
+        <WrappedContactForm />\
+      </Provider>\
+    );\
+\
+    const submitBtn = screen.getByRole("button", \{ name: /submit/i \});\
+\
+    await act(async () => \{\
+      fireEvent.click(submitBtn);\
+      await waitFor(() => expect(screen.getByText("First Name is required")).toBeInTheDocument());\
+      await waitFor(() => expect(screen.getByText("Last Name is required")).toBeInTheDocument());\
+      await waitFor(() => expect(screen.getByText("Email is required")).toBeInTheDocument());\
+      await waitFor(() => expect(screen.getByText("Message is required")).toBeInTheDocument());\
+    \});\
+  \});\
+\});\
+```\
+\
+In this example, a new functional component `WrappedContactForm` was created to wrap `ContactForm` in a `Formik` context. The rest of the test cases remain the same, with the only difference being that the `WrappedContactForm` is rendered instead of the original `ContactForm`. This way, you ensure that your `ContactForm` component receives the required `Formik` context and props.\
+\
+\
+11) Write unit test using react-testing-library for this component:\
+\
+const ContactsTable = (\{ tableData \}) => \{\
+  return (\
+    <Styled.Table>\
+      <thead>\
+        <Styled.TableRow>\
+          \{tableHeaders.map((header) => \{\
+            return (\
+              <Styled.TableHeader key=\{header\}>\{header\}</Styled.TableHeader>\
+            );\
+          \})\}\
+        </Styled.TableRow>\
+      </thead>\
+      <tbody>\
+        \{tableData.map((\{ id, firstName, lastName, email, message \}) => \{\
+          return (\
+            <Styled.TableRow key=\{id\}>\
+              <Styled.TableData>\{firstName\}</Styled.TableData>\
+              <Styled.TableData>\{lastName\}</Styled.TableData>\
+              <Styled.TableData>\{email\}</Styled.TableData>\
+              <Styled.TableData>\{message\}</Styled.TableData>\
+            </Styled.TableRow>\
+          );\
+        \})\}\
+      </tbody>\
+    </Styled.Table>\
+  );\
+\};\
+\
+Sure! Here is an example of a simple unit test for your `ContactsTable` component. In this test, we will verify that the component renders the appropriate headers and that it renders a row for each entry in the `tableData` prop. \
+\
+Let's assume that the `tableHeaders` array looks like this: `const tableHeaders = ['First Name', 'Last Name', 'Email', 'Message']`.\
+\
+And here is the test:\
+\
+```javascript\
+import React from "react";\
+import \{ render, within \} from "@testing-library/react";\
+import ContactsTable from "./ContactsTable"; // Replace with your component location\
+\
+describe("ContactsTable", () => \{\
+  const tableHeaders = ['First Name', 'Last Name', 'Email', 'Message'];\
+  const tableData = [\
+    \{\
+      id: '1',\
+      firstName: 'John',\
+      lastName: 'Doe',\
+      email: 'john.doe@example.com',\
+      message: 'Hello, World!'\
+    \},\
+    \{\
+      id: '2',\
+      firstName: 'Jane',\
+      lastName: 'Smith',\
+      email: 'jane.smith@example.com',\
+      message: 'Hello, Jane!'\
+    \}\
+  ];\
+\
+  it("should render the table headers", () => \{\
+    const \{ getByRole \} = render(<ContactsTable tableData=\{tableData\} />);\
+    const tableHead = getByRole('rowgroup', \{ name: /header/i \});\
+    const \{ getAllByRole \} = within(tableHead);\
+    const headers = getAllByRole('columnheader');\
+    headers.forEach((header, index) => \{\
+      expect(header).toHaveTextContent(tableHeaders[index]);\
+    \});\
+  \});\
+\
+  it("should render the table data", () => \{\
+    const \{ getByRole \} = render(<ContactsTable tableData=\{tableData\} />);\
+    const tableBody = getByRole('rowgroup', \{ name: /body/i \});\
+    const \{ getAllByRole \} = within(tableBody);\
+    const rows = getAllByRole('row');\
+    expect(rows).toHaveLength(tableData.length);\
+\
+    rows.forEach((row, rowIndex) => \{\
+      const \{ getAllByRole \} = within(row);\
+      const cells = getAllByRole('cell');\
+      expect(cells[0]).toHaveTextContent(tableData[rowIndex].firstName);\
+      expect(cells[1]).toHaveTextContent(tableData[rowIndex].lastName);\
+      expect(cells[2]).toHaveTextContent(tableData[rowIndex].email);\
+      expect(cells[3]).toHaveTextContent(tableData[rowIndex].message);\
+    \});\
+  \});\
+\});\
+```\
+\
+This test checks the following:\
+\
+1. That the component renders the expected table headers.\
+2. That the component renders a row for each entry in the `tableData` prop, and that the content of each cell in the rows matches the corresponding data from the `tableData` prop.\
+\
+\
+12) (*Here I forgot to ask question and directly sent component for generation unit tests)\
+function App() \{\
+  const users = useSelector((state) => state.users.users);\
+\
+  return (\
+    <div className="App" data-testid="app">\
+      <ContactForm />\
+      \{!!users?.length && <ContactsTable tableData=\{users\} />\}\
+    </div>\
+  );\
+\}\
+\
+To write unit tests for the `App` component, you will need to mock the Redux store and selectors using libraries such as `react-redux` and `redux-mock-store`.\
+\
+Here's an example of how you could test the `App` component using `react-testing-library`:\
+\
+```javascript\
+import React from "react";\
+import \{ render, screen \} from "@testing-library/react";\
+import \{ Provider \} from "react-redux";\
+import configureMockStore from "redux-mock-store";\
+import \{ useSelector \} from "react-redux";\
+\
+import App from "./App"; // Replace with your component location\
+import ContactForm from "./ContactForm"; // Replace with your component location\
+import ContactsTable from "./ContactsTable"; // Replace with your component location\
+\
+jest.mock("react-redux", () => (\{\
+  ...jest.requireActual("react-redux"),\
+  useSelector: jest.fn()\
+\}));\
+\
+jest.mock("./ContactForm"); // Replace with your component location\
+jest.mock("./ContactsTable"); // Replace with your component location\
+\
+const mockStore = configureMockStore();\
+\
+describe("App", () => \{\
+  beforeEach(() => \{\
+    ContactForm.mockReturnValue(<div>ContactForm</div>);\
+    ContactsTable.mockReturnValue(<div>ContactsTable</div>);\
+  \});\
+\
+  afterEach(() => \{\
+    jest.clearAllMocks();\
+  \});\
+\
+  it("renders the ContactForm", () => \{\
+    const store = mockStore(\{\
+      users: \{\
+        users: [],\
+      \},\
+    \});\
+\
+    render(\
+      <Provider store=\{store\}>\
+        <App />\
+      </Provider>\
+    );\
+\
+    expect(screen.getByText("ContactForm")).toBeInTheDocument();\
+  \});\
+\
+  it("renders the ContactsTable if there are users", () => \{\
+    useSelector.mockImplementation((selector) =>\
+      selector(\{\
+        users: \{\
+          users: [\
+            \{\
+              id: "1",\
+              firstName: "John",\
+              lastName: "Doe",\
+              email: "john.doe@example.com",\
+              message: "Hello, World!",\
+            \},\
+          ],\
+        \},\
+      \})\
+    );\
+\
+    const store = mockStore(\{\
+      users: \{\
+        users: [\
+          \{\
+            id: "1",\
+            firstName: "John",\
+            lastName: "Doe",\
+            email: "john.doe@example.com",\
+            message: "Hello, World!",\
+          \},\
+        ],\
+      \},\
+    \});\
+\
+    render(\
+      <Provider store=\{store\}>\
+        <App />\
+      </Provider>\
+    );\
+\
+    expect(screen.getByText("ContactsTable")).toBeInTheDocument();\
+  \});\
+\
+  it("does not render the ContactsTable if there are no users", () => \{\
+    useSelector.mockImplementation((selector) =>\
+      selector(\{\
+        users: \{\
+          users: [],\
+        \},\
+      \})\
+    );\
+\
+    const store = mockStore(\{\
+      users: \{\
+        users: [],\
+      \},\
+    \});\
+\
+    render(\
+      <Provider store=\{store\}>\
+        <App />\
+      </Provider>\
+    );\
+\
+    expect(screen.queryByText("ContactsTable")).toBeNull();\
+  \});\
+\});\
+```\
+\
+In this example, we are using the `redux-mock-store` library to create a mock Redux store. The `useSelector` function from `react-redux` is also mocked to return mocked data. We're also mocking the `ContactForm` and `ContactsTable` components to return simple div elements.\
+\
+The tests check the following:\
+\
+1. That the `ContactForm` component is always rendered.\
+2. That the `ContactsTable` component is rendered if there are users in the state.\
+3. That the `ContactsTable` component is not rendered if there are no users in the state.\
+\
+\
+13) Write unit test using react-testing-library for store:\
+\pard\pardeftab720\partightenfactor0
+\cf2 \
+const store = configureStore(\{\
+  reducer: \{\
+    users: userReducer,\
+  \},\
+\});\
+\
+For testing the Redux store, we need to test the actions, reducers, and selectors that the store uses. Testing the store itself would involve testing the actions, reducers, and selectors together. \
+\
+Let's create a simple example with a user reducer and a single action.\
+\
+1. Here's a simple `userReducer` and action creator `addUser`:\
+\
+```javascript\
+// userSlice.js\
+import \{ createSlice \} from '@reduxjs/toolkit';\
+\
+const initialState = \{\
+  users: [],\
+\};\
+\
+const userSlice = createSlice(\{\
+  name: 'users',\
+  initialState,\
+  reducers: \{\
+    addUser: (state, action) => \{\
+      state.users.push(action.payload);\
+    \},\
+  \},\
+\});\
+\
+export const \{ addUser \} = userSlice.actions;\
+export const selectUsers = (state) => state.users.users;\
+export default userSlice.reducer;\
+```\
+\
+2. Now let's write unit tests for the actions, reducer, and selector:\
+\
+```javascript\
+import userReducer, \{ addUser, selectUsers \} from './userSlice';\
+\
+describe('userSlice', () => \{\
+  const initialState = \{\
+    users: [],\
+  \};\
+\
+  it('should handle initial state', () => \{\
+    expect(userReducer(undefined, \{ type: 'unknown' \})).toEqual(initialState);\
+  \});\
+\
+  it('should handle addUser', () => \{\
+    const newUser = \{\
+      id: '1',\
+      firstName: 'John',\
+      lastName: 'Doe',\
+      email: 'john.doe@example.com',\
+      message: 'Hello, World!',\
+    \};\
+    const expectedState = \{\
+      users: [newUser],\
+    \};\
+    expect(userReducer(initialState, addUser(newUser))).toEqual(expectedState);\
+  \});\
+\
+  it('should select users', () => \{\
+    const state = \{\
+      users: \{\
+        users: [\
+          \{\
+            id: '1',\
+            firstName: 'John',\
+            lastName: 'Doe',\
+            email: 'john.doe@example.com',\
+            message: 'Hello, World!',\
+          \},\
+        ],\
+      \},\
+    \};\
+    const result = selectUsers(state);\
+    expect(result).toEqual(state.users.users);\
+  \});\
+\});\
+```\
+\
+In this example, we test:\
+\
+1. That the `userReducer` returns the initial state when called with an unknown action.\
+2. That the `addUser` action updates the state correctly.\
+3. That the `selectUsers` selector returns the correct part of the state.\
+\
+These tests will give you confidence that the actions, reducer, and selectors are working as expected in isolation. After that, you can test your components with the mock store, knowing that the store logic itself is correctly implemented.\
+\pard\pardeftab720\partightenfactor0
+\cf2 \
+\
+14) How to run test coverage locally?\
+\
+You can use the `--coverage` flag when running tests with `jest` to generate test coverage reports locally. The report shows the percentage of your code that is covered by tests, which can be useful for identifying areas of your code that might benefit from more testing.\
+\
+If you're using `create-react-app`, you can generate coverage reports using the following steps:\
+\
+1. Open a terminal and navigate to your project directory.\
+\
+2. Run the following command:\
+   ```\
+   npm test -- --coverage\
+   ```\
+   or, if you're using `yarn`:\
+   ```\
+   yarn test --coverage\
+   ```\
+\
+3. Once the tests finish running, you'll see a summary of your coverage in the terminal. Additionally, a detailed report will be generated in the `coverage` directory at the root of your project. This report is typically output in the `lcov-report` format, which is a widely used format for coverage tools.\
+\
+4. To view the detailed report, open the `index.html` file located in the `coverage/lcov-report` directory in your web browser.\
+\
+5. In the report, you can see the coverage percentage for each file and for your entire project, broken down by statements, branches, functions, and lines. Click on individual files to view the code with coverage information highlighted.\
+\
+Keep in mind that while high test coverage is generally desirable, it's not the only metric to consider when assessing the quality of your tests. It's essential to have meaningful tests that effectively simulate real-world scenarios and edge cases.\
+\
+If you want to customize the coverage report further, you can create or modify the `jest.config.js` file in your project and add specific configuration options for the `coverageReporters` and `coverageThreshold` options. You can find more information on these options in the [Jest documentation](https://jestjs.io/docs/configuration#coveragereporters-arraystring).\
+}

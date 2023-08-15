@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Field, ErrorMessage } from "formik";
 import { useDispatch } from "react-redux";
-import { addUser } from "../store/userSlice";
+import { addUser } from "../../store/userSlice";
 import {
   FormStyled,
   HeaderStyled,
@@ -56,7 +56,12 @@ const ContactForm = () => {
           <HeaderStyled>Contact form</HeaderStyled>
           <FieldWrapper>
             <LabelStyled>First Name</LabelStyled>
-            <Field className="field" type="text" name="firstName" />
+            <Field
+              className="field"
+              type="text"
+              name="firstName"
+              data-testid="input-first-name"
+            />
             <ErrorMessage name="firstName">
               {(errorMsg) => <ErrorStyled>{errorMsg}</ErrorStyled>}
             </ErrorMessage>
@@ -64,7 +69,12 @@ const ContactForm = () => {
 
           <FieldWrapper>
             <LabelStyled>Last Name</LabelStyled>
-            <Field className="field" type="text" name="lastName" />
+            <Field
+              className="field"
+              type="text"
+              name="lastName"
+              data-testid="input-last-name"
+            />
             <ErrorMessage name="lastName">
               {(errorMsg) => <ErrorStyled>{errorMsg}</ErrorStyled>}
             </ErrorMessage>
@@ -72,7 +82,12 @@ const ContactForm = () => {
 
           <FieldWrapper>
             <LabelStyled>Email</LabelStyled>
-            <Field className="field" type="email" name="email" />
+            <Field
+              className="field"
+              type="email"
+              name="email"
+              data-testid="input-email"
+            />
             <ErrorMessage name="email">
               {(errorMsg) => <ErrorStyled>{errorMsg}</ErrorStyled>}
             </ErrorMessage>
@@ -84,6 +99,7 @@ const ContactForm = () => {
               className="field field-textarea"
               as="textarea"
               name="message"
+              data-testid="textarea-message"
             />
 
             <ErrorMessage name="message">

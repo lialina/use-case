@@ -6,16 +6,16 @@ const tableHeaders = ["First Name", "Last Name", "Email", "Message"];
 const ContactsTable = ({ tableData }) => {
   return (
     <Styled.Table>
-      <thead>
+      <thead data-testid="table-head">
         <Styled.TableRow>
-          {tableHeaders.map((header, index) => {
+          {tableHeaders.map((header) => {
             return (
-              <Styled.TableHeader key={index}>{header}</Styled.TableHeader>
+              <Styled.TableHeader key={header}>{header}</Styled.TableHeader>
             );
           })}
         </Styled.TableRow>
       </thead>
-      <tbody>
+      <tbody data-testid="table-body">
         {tableData.map(({ id, firstName, lastName, email, message }) => {
           return (
             <Styled.TableRow key={id}>

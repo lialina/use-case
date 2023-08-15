@@ -1,10 +1,11 @@
 import { useSelector } from "react-redux";
-import ContactForm from "./components/ContactForm";
-import ContactsTable from "./components/ContactsTable";
+import { selectUsers } from "./store/userSlice";
+import ContactForm from "./components/ContactForm/ContactForm";
+import ContactsTable from "./components/ContactsTable/ContactsTable";
 import "./App.css";
 
 function App() {
-  const users = useSelector((state) => state.users.users);
+  const users = useSelector(selectUsers);
 
   return (
     <div className="App" data-testid="app">
