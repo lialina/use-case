@@ -1,0 +1,225 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2709
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 HelveticaNeue;}
+{\colortbl;\red255\green255\blue255;\red39\green40\blue50;}
+{\*\expandedcolortbl;;\cssrgb\c20392\c20784\c25490;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 1) 
+\f1\fs32 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Create description in 10 sentences for React application consisting of these 3 components: \
+\pard\pardeftab720\partightenfactor0
+\cf2 \
+1) function App() \{\
+  const users = useSelector(selectUsers);\
+\
+  return (\
+    <div className="App" data-testid="app">\
+      <ContactForm />\
+      \{!!users?.length && <ContactsTable tableData=\{users\} />\}\
+    </div>\
+  );\
+\}\
+\
+2) const ContactForm = () => \{\
+  const dispatch = useDispatch();\
+\
+  const initialValues = \{\
+    firstName: "",\
+    lastName: "",\
+    email: "",\
+    message: "",\
+  \};\
+\
+  const validationSchema = Yup.object(\{\
+    firstName: Yup.string()\
+      .min(1, "First name must contain at least 1 character")\
+      .max(50, "First name must contain up to 50 characters")\
+      .required("First Name is required"),\
+    lastName: Yup.string()\
+      .min(1, "Last name must contain at least 1 character")\
+      .max(50, "Last name must contain up to 50 characters")\
+      .required("Last Name is required"),\
+    email: Yup.string()\
+      .email("Invalid email format")\
+      .required("Email is required"),\
+    message: Yup.string()\
+      .min(1, "Message must contain at least 1 character")\
+      .max(200, "Message must contain up to 200 characters")\
+      .required("Message is required"),\
+  \});\
+\
+  const onSubmit = (values) => \{\
+    dispatch(addUser(\{ ...values, id: uuidv4() \}));\
+  \};\
+\
+  return (\
+    <Formik\
+      initialValues=\{initialValues\}\
+      validationSchema=\{validationSchema\}\
+      onSubmit=\{onSubmit\}\
+    >\
+      \{(formik) => (\
+        <FormStyled>\
+          <HeaderStyled>Contact form</HeaderStyled>\
+          <FieldWrapper>\
+            <LabelStyled>First Name</LabelStyled>\
+            <Field\
+              className="field"\
+              type="text"\
+              name="firstName"\
+              data-testid="input-first-name"\
+            />\
+            <ErrorMessage name="firstName">\
+              \{(errorMsg) => <ErrorStyled>\{errorMsg\}</ErrorStyled>\}\
+            </ErrorMessage>\
+          </FieldWrapper>\
+\
+          <FieldWrapper>\
+            <LabelStyled>Last Name</LabelStyled>\
+            <Field\
+              className="field"\
+              type="text"\
+              name="lastName"\
+              data-testid="input-last-name"\
+            />\
+            <ErrorMessage name="lastName">\
+              \{(errorMsg) => <ErrorStyled>\{errorMsg\}</ErrorStyled>\}\
+            </ErrorMessage>\
+          </FieldWrapper>\
+\
+          <FieldWrapper>\
+            <LabelStyled>Email</LabelStyled>\
+            <Field\
+              className="field"\
+              type="email"\
+              name="email"\
+              data-testid="input-email"\
+            />\
+            <ErrorMessage name="email">\
+              \{(errorMsg) => <ErrorStyled>\{errorMsg\}</ErrorStyled>\}\
+            </ErrorMessage>\
+          </FieldWrapper>\
+\
+          <FieldWrapper>\
+            <LabelStyled>Message</LabelStyled>\
+            <Field\
+              className="field field-textarea"\
+              as="textarea"\
+              name="message"\
+              data-testid="textarea-message"\
+            />\
+\
+            <ErrorMessage name="message">\
+              \{(errorMsg) => <ErrorStyled>\{errorMsg\}</ErrorStyled>\}\
+            </ErrorMessage>\
+          </FieldWrapper>\
+\
+          <div className="submit-btn-container">\
+            <SubmitBtnStyled type="submit">Submit</SubmitBtnStyled>\
+          </div>\
+        </FormStyled>\
+      )\}\
+    </Formik>\
+  );\
+\};\
+\
+3) const ContactsTable = (\{ tableData \}) => \{\
+  return (\
+    <Styled.Table>\
+      <thead data-testid="table-head">\
+        <Styled.TableRow>\
+          \{tableHeaders.map((header) => \{\
+            return (\
+              <Styled.TableHeader key=\{header\}>\{header\}</Styled.TableHeader>\
+            );\
+          \})\}\
+        </Styled.TableRow>\
+      </thead>\
+      <tbody data-testid="table-body">\
+        \{tableData.map((\{ id, firstName, lastName, email, message \}) => \{\
+          return (\
+            <Styled.TableRow key=\{id\}>\
+              <Styled.TableData>\{firstName\}</Styled.TableData>\
+              <Styled.TableData>\{lastName\}</Styled.TableData>\
+              <Styled.TableData>\{email\}</Styled.TableData>\
+              <Styled.TableData>\{message\}</Styled.TableData>\
+            </Styled.TableRow>\
+          );\
+        \})\}\
+      </tbody>\
+    </Styled.Table>\
+  );\
+\};\
+\
+This React application consists of three main components: App, ContactForm, and ContactsTable. The main function, App, serves as the container for the other two components. It uses the Redux hook, useSelector, to retrieve a list of user data from the state. The App function renders the ContactForm and, if there are users in the state, it also renders the ContactsTable, passing the user data as a prop.\
+\
+The ContactForm component provides a form for users to input their contact information and a message. It initializes a form with empty fields for first name, last name, email, and message. The form is validated with a schema from the Yup library, which ensures that each field has appropriate content. Upon submission, the form dispatches an action to add a new user with the form data and a unique ID to the Redux state.\
+\
+The ContactsTable component receives the user data from the App component as a prop. It renders a table with headers for first name, last name, email, and message. The table displays the user data in rows, with each cell corresponding to the user's first name, last name, email, or message. The ContactsTable component maps through the user data and renders a row for each user, displaying their contact information.\
+\
+The App component is the entry point of the application, and it integrates the ContactForm and ContactsTable components. It uses conditional rendering to display the ContactsTable only if there are users in the state. The application provides a seamless user interface for adding and viewing contact information, backed by Redux for state management. The ContactForm and ContactsTable components work together to collect and display user contact information in a user-friendly way.\
+\
+\
+2) Write how to build and run create-react-app application locally\
+\
+To build and run a Create React App application locally, follow these steps:\
+\
+1. **Installation:** Make sure you have Node.js and npm (Node Package Manager) installed on your machine. You can download them from [Node.js official website](https://nodejs.org/). After installation, you can check the versions by running `node -v` and `npm -v` in your terminal.\
+\
+2. **Create a New App:** Use the command line to navigate to the directory where you want to create your new React app. Run the following command to create a new app named `my-app`:\
+   ```bash\
+   npx create-react-app my-app\
+   ```\
+\
+3. **Navigate to App Directory:** Change to the newly created app directory:\
+  \
+\
+3) Write how to build and run create-react-app application locally from github repository\
+\
+To build and run a Create React App application locally from a GitHub repository, you can follow these steps:\
+\
+1. **Clone the Repository:** First, navigate to the directory where you want to clone the repository using the command line. Then, clone the repository using:\
+   ```bash\
+   git clone https://github.com/USERNAME/REPOSITORY_NAME.git\
+   ```\
+   Replace `USERNAME` with the GitHub username and `REPOSITORY_NAME` with the name of the repository you want to clone.\
+\
+2. **Navigate to the Cloned Directory:** Change to the cloned directory:\
+   ```bash\
+   cd REPOSITORY_NAME\
+   ```\
+\
+3. **Install Dependencies:** Since the project dependencies listed in `package.json` are not included in the GitHub repository, you need to install them. Use npm (or yarn, if it's being used in the project) to install the dependencies:\
+   ```bash\
+   npm install\
+   ```\
+\
+4. **Run the App Locally:** After the dependencies are installed, start the local development server using:\
+   ```bash\
+   npm start\
+   ```\
+   Your app should now open in your default web browser at [http://localhost:3000](http://localhost:3000).\
+\
+5. **Make Changes (if necessary):** With the app running, you can now open the project folder in your preferred text editor or IDE and make changes to the code. The app will automatically reload in the browser whenever you save changes.\
+\
+6. **Build the App for Production:** If you need to create a production-ready build, run the following command:\
+   ```bash\
+   npm run build\
+   ```\
+   This command creates an optimized production build and outputs it to the `build` directory.\
+\
+7. **Run the Production Build Locally (Optional):** If you want to test the production build locally, you'll need a static file server. One way to do this is to install the `serve` package:\
+   ```bash\
+   npm install -g serve\
+   ```\
+   After installation, you can serve the production build with:\
+   ```bash\
+   serve -s build\
+   ```\
+   This will serve your production build on [http://localhost:5000](http://localhost:5000).\
+\
+8. **View the App:** Whether you're running the development server or the production build, you can open a web browser to the corresponding address ([http://localhost:3000](http://localhost:3000) for development, [http://localhost:5000](http://localhost:5000) for production) to see the app in action.\
+\
+That's it! You've now successfully cloned, built, and run a Create React App application locally from a GitHub repository.\
+}
