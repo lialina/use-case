@@ -51,7 +51,7 @@ const ContactForm = () => {
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      {(formik) => (
+      {({ touched, dirty, isValid }) => (
         <FormStyled>
           <HeaderStyled>Contact form</HeaderStyled>
           <FieldWrapper>
@@ -61,6 +61,7 @@ const ContactForm = () => {
               type="text"
               name="firstName"
               data-testid="input-first-name"
+              touched={touched}
             />
             <ErrorMessage name="firstName">
               {(errorMsg) => <ErrorStyled>{errorMsg}</ErrorStyled>}
@@ -74,6 +75,7 @@ const ContactForm = () => {
               type="text"
               name="lastName"
               data-testid="input-last-name"
+              touched={touched}
             />
             <ErrorMessage name="lastName">
               {(errorMsg) => <ErrorStyled>{errorMsg}</ErrorStyled>}
@@ -87,6 +89,7 @@ const ContactForm = () => {
               type="email"
               name="email"
               data-testid="input-email"
+              touched={touched}
             />
             <ErrorMessage name="email">
               {(errorMsg) => <ErrorStyled>{errorMsg}</ErrorStyled>}
@@ -100,6 +103,7 @@ const ContactForm = () => {
               as="textarea"
               name="message"
               data-testid="textarea-message"
+              touched={touched}
             />
 
             <ErrorMessage name="message">
@@ -108,7 +112,9 @@ const ContactForm = () => {
           </FieldWrapper>
 
           <div className="submit-btn-container">
-            <SubmitBtnStyled type="submit">Submit</SubmitBtnStyled>
+            <SubmitBtnStyled type="submit" disabled={!(isValid && dirty)}>
+              Submit
+            </SubmitBtnStyled>
           </div>
         </FormStyled>
       )}

@@ -55,19 +55,24 @@ describe("ContactForm", () => {
   });
 
   it("should show validation errors", async () => {
-    render(
-      <Provider store={store}>
-        <ContactForm />
-      </Provider>
-    );
+    render(<ContactForm />);
 
+    const firstNameInput = screen.getByTestId("input-first-name");
+    const lastNameInput = screen.getByTestId("input-last-name");
+    const emailInput = screen.getByTestId("input-email");
+    const messageTextarea = screen.getByTestId("textarea-message");
     const submitBtn = screen.getByRole("button", { name: /submit/i });
 
-    fireEvent.click(submitBtn);
+    await userEvent.click(firstNameInput);
+    await userEvent.click(lastNameInput);
+    await userEvent.click(emailInput);
+    await userEvent.click(messageTextarea);
+    await userEvent.click(document.body);
 
-    await screen.findByText("First Name is required");
-    await screen.findByText("Last Name is required");
-    await screen.findByText("Email is required");
-    await screen.findByText("Message is required");
+    expect(submitBtn).toBeDisabled();
+    expect(screen.getByText("First Name is required")).toBeInTheDocument();
+    expect(screen.getByText("Last Name is required")).toBeInTheDocument();
+    expect(screen.getByText("Email is required")).toBeInTheDocument();
+    expect(screen.getByText("Message is required")).toBeInTheDocument();
   });
 });

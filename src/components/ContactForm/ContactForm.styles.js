@@ -51,7 +51,8 @@ export const SubmitBtnStyled = styled("button")`
   padding: 10px 15px;
   border-radius: 4px;
   border: none;
-  background-color: #007bff;
+  background-color: ${(props) => (props.disabled ? "#ccc" : "#007bff")};
+
   color: white;
   cursor: pointer;
 `;
