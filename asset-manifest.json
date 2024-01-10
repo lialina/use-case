@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/use-case/static/css/main.ccc2c92a.css",
+    "main.js": "/use-case/static/js/main.71a6fffd.js",
+    "index.html": "/use-case/index.html",
+    "main.ccc2c92a.css.map": "/use-case/static/css/main.ccc2c92a.css.map",
+    "main.71a6fffd.js.map": "/use-case/static/js/main.71a6fffd.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ccc2c92a.css",
+    "static/js/main.71a6fffd.js"
+  ]
+}
