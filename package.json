@@ -2,6 +2,7 @@
   "name": "use-case",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://lialina.github.io/use-case/",
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
     "formik": "^2.4.3",
